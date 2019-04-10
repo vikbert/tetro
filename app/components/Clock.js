@@ -23,7 +23,7 @@ class Clock extends Component {
     const {date} = this.state;
     return (
       <div className={styles.time}>
-        {`${date.getUTCHours()}:${date.getUTCMinutes()}`}
+        {`${date.toISOString().substr(11, 5)}`}
       </div>
     );
   }
