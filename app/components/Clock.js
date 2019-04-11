@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import styles from './Clock.css';
 
 class Clock extends Component {
   constructor(props) {
@@ -8,11 +7,11 @@ class Clock extends Component {
   }
 
   componentDidMount() {
-    this.timeId = setInterval(() => this.tick(), 1000);
+    this.clockTimeId = setInterval(() => this.tick(), 1000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.timeId);
+    clearInterval(this.clockTimeId);
   }
 
   tick() {
@@ -22,8 +21,10 @@ class Clock extends Component {
   render() {
     const {date} = this.state;
     return (
-      <div className={styles.time}>
-        {`${date.toISOString().substr(11, 5)}`}
+      <div>
+        <h1>
+          {`${date.toISOString().substr(11, 5)}`}
+        </h1>
       </div>
     );
   }

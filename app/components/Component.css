@@ -1,0 +1,25 @@
+/* Home */
+.container {
+    margin: auto;
+    padding-top: 5%;
+    text-align: center;
+}
+
+.container h1 {
+    font-size: 10rem;
+}
+
+.container h2 {
+    font-size: 5rem;
+}
+
+.container a{
+    font-size: 4rem;
+    padding: 0 10px;
+}
+
+/* counter */
+.backButton {
+    position: absolute;
+}
+
