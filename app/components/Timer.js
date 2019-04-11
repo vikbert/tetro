@@ -8,8 +8,7 @@ class Timer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      seconds: props.seconds,
-      isPaused: false,
+      isPaused: props.isPaused,
     };
   }
 
@@ -18,16 +17,16 @@ class Timer extends Component {
   };
 
   countDown() {
-    const {seconds} = this.state;
+    const {decrement, seconds} = this.props;
+
     if (seconds === 0) {
       clearInterval(this.timerId);
       return;
     }
-
-    this.setState({seconds: seconds - 1});
+    decrement(this.timerId);
   };
 
-  handleClickPause = e => {
+  onTogglePause = e => {
     e.preventDefault();
 
     const {isPaused} = this.state;
@@ -39,22 +38,24 @@ class Timer extends Component {
     }
   };
 
-  handleClickReset = e => {
+  onReset = e => {
     e.preventDefault();
-    const {seconds} = this.props;
+    const {reset} = this.props;
     this.setState({
       isPaused: false,
-      seconds,
     });
+    reset(this.timerId);
     clearInterval(this.timerId);
   };
 
   render() {
     const current = new Date(null);
-    const {seconds, isPaused} = this.state;
+    const {seconds} = this.props;
+    const {isPaused} = this.state;
+
     current.setSeconds(seconds);
 
-    const resetIcon = isPaused ? <i className="far fa-pause-circle" /> : <i className="btn far fa-play-circle"/>;
+    const resetIcon = isPaused ? <i className="far fa-pause-circle"/> : <i className="btn far fa-play-circle"/>;
 
     return (
       <div>
@@ -68,10 +69,10 @@ class Timer extends Component {
             {current.toISOString().substr(14, 5)}
           </h1>
           <div className="btnGroup">
-            <a href="#stop" onClick={this.handleClickReset}>
-              <i className="btn far fa-stop-circle"/>
+            <a href="#stop" onClick={this.onReset}>
+              <i className="fas fa-ban"/>
             </a>
-            <a href="#reset" onClick={this.handleClickPause}>
+            <a href="#reset" onClick={this.onTogglePause}>
               {resetIcon}
             </a>
           </div>
@@ -84,6 +85,8 @@ class Timer extends Component {
 Timer.propTypes = {
   seconds: PropTypes.number.isRequired,
   isPaused: PropTypes.bool.isRequired,
+  decrement: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
 };
 
 export default Timer;

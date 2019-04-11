@@ -4,9 +4,7 @@ import Timer from '../components/Timer';
 import * as TimerActions from '../actions/timer';
 
 function mapStateToProps(state) {
-  return {
-    seconds: state.timer,
-  };
+  return state.timer;
 }
 
 function mapDispatchToProps(dispatch) {
