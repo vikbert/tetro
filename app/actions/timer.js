@@ -1,5 +1,6 @@
 export const DECREMENT_TIME = 'DECREMENT_TIME';
 export const RESET_TIME = 'RESET_TIME';
+export const PAUSE_TIME = 'PAUSE_TIME';
 
 export function decrement(timeId) {
   return {
@@ -12,5 +13,11 @@ export function reset(timeId) {
   return {
     type: RESET_TIME,
     timeId
+  };
+}
+
+export function pause() {
+  return {
+    type: RESET_TIME,
   };
 }

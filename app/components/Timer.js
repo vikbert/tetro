@@ -12,6 +12,13 @@ class Timer extends Component {
     };
   }
 
+  clearAllIntervals() {
+    const maxIntervalId = window.setTimeout(() => false, 0);
+    for (let index = 0; index < maxIntervalId; index += 1) {
+      window.clearTimeout(index);
+    }
+  };
+
   triggerCountDown() {
     this.timerId = setInterval(() => this.countDown(), 1000);
   };
@@ -20,7 +27,7 @@ class Timer extends Component {
     const {decrement, seconds} = this.props;
 
     if (seconds === 0) {
-      clearInterval(this.timerId);
+      this.clearAllIntervals();
       return;
     }
     decrement(this.timerId);

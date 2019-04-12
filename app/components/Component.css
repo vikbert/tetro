@@ -1,8 +1,13 @@
+#root {
+
+}
 /* Home */
 .container {
     margin: auto;
     padding-top: 5%;
     text-align: center;
+    height: 100%;
+    width: 100%;
 }
 
 .container h1 {
@@ -11,6 +16,10 @@
 
 .container h2 {
     font-size: 5rem;
+}
+
+.container h3 {
+    font-size: 3rem;
 }
 
 .container a{

@@ -20,11 +20,12 @@ class Clock extends Component {
 
   render() {
     const {date} = this.state;
+    const day = date.toString().substr(0, 10);
+    const time = date.toString().substr(15, 6);
     return (
       <div>
-        <h1>
-          {`${date.toISOString().substr(11, 5)}`}
-        </h1>
+        <h3>{day}</h3>
+        <h1>{time}</h1>
       </div>
     );
   }
