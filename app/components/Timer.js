@@ -95,7 +95,6 @@ class Timer extends Component {
 
 Timer.propTypes = {
   seconds: PropTypes.number.isRequired,
-  init: PropTypes.number.isRequired,
   isPaused: PropTypes.bool.isRequired,
   isCompleted: PropTypes.bool.isRequired,
   decrement: PropTypes.func.isRequired,
