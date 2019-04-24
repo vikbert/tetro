@@ -5,19 +5,19 @@ import styles from './Component.css';
 import routes from "../constants/routes";
 
 class Timer extends Component {
+  static clearAllIntervals () {
+    const maxIntervalId = window.setTimeout(() => false, 0);
+    for (let index = 0; index < maxIntervalId; index += 1) {
+      window.clearTimeout(index);
+    }
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       isPaused: props.isPaused,
     };
   }
-
-  clearAllIntervals() {
-    const maxIntervalId = window.setTimeout(() => false, 0);
-    for (let index = 0; index < maxIntervalId; index += 1) {
-      window.clearTimeout(index);
-    }
-  };
 
   triggerCountDown() {
     this.timerId = setInterval(() => this.countDown(), 1000);
@@ -27,9 +27,13 @@ class Timer extends Component {
     const {decrement, seconds} = this.props;
 
     if (seconds === 0) {
-      this.clearAllIntervals();
+      Timer.clearAllIntervals();
+      this.setState({
+        isPaused: false
+      });
       return;
     }
+
     decrement(this.timerId);
   };
 
@@ -57,12 +61,12 @@ class Timer extends Component {
 
   render() {
     const current = new Date(null);
-    const {seconds} = this.props;
+    const {seconds, isCompleted} = this.props;
     const {isPaused} = this.state;
 
     current.setSeconds(seconds);
 
-    const resetIcon = isPaused ? <i className="far fa-pause-circle"/> : <i className="btn far fa-play-circle"/>;
+    const resetIcon = (isPaused && !isCompleted) ? <i className="far fa-pause-circle"/> : <i className="btn far fa-play-circle"/>;
 
     return (
       <div>
@@ -76,10 +80,10 @@ class Timer extends Component {
             {current.toISOString().substr(14, 5)}
           </h1>
           <div className="btnGroup">
-            <a href="#stop" onClick={this.onReset}>
+            <a href="#reset" onClick={this.onReset}>
               <i className="fas fa-ban"/>
             </a>
-            <a href="#reset" onClick={this.onTogglePause}>
+            <a href="#toggle" onClick={this.onTogglePause}>
               {resetIcon}
             </a>
           </div>
@@ -91,7 +95,9 @@ class Timer extends Component {
 
 Timer.propTypes = {
   seconds: PropTypes.number.isRequired,
+  init: PropTypes.number.isRequired,
   isPaused: PropTypes.bool.isRequired,
+  isCompleted: PropTypes.bool.isRequired,
   decrement: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
 };

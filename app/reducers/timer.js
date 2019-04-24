@@ -30,7 +30,7 @@ export default function timer(state = initState, action) {
       return state.seconds > 0 ? {...state, seconds: state.seconds - 1} : state;
     case RESET_TIME:
       clearAllIntervals();
-      return {...state, seconds: state.init, isPaused: false};
+      return {...state, seconds: state.init, isPaused: false, isCompleted: false};
     case PAUSE_TIME:
       return {...state, isPaused: true};
     default:

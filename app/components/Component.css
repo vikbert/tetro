@@ -1,7 +1,3 @@
-#root {
-
-}
-/* Home */
 .container {
     margin: auto;
     padding-top: 5%;
@@ -30,5 +26,6 @@
 /* counter */
 .backButton {
     position: absolute;
+    padding: 40px;
 }
 
