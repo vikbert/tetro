@@ -3,20 +3,14 @@ import {Link} from "react-router-dom";
 import PropTypes from 'prop-types';
 import styles from './Component.css';
 import routes from "../constants/routes";
+import {clearAllIntervals} from '../utils/WindowsTimer';
 
 class Timer extends Component {
-  static clearAllIntervals () {
-    const maxIntervalId = window.setTimeout(() => false, 0);
-    for (let index = 0; index < maxIntervalId; index += 1) {
-      window.clearTimeout(index);
-    }
-  };
-
   constructor(props) {
     super(props);
     this.state = {
       isPaused: props.isPaused,
-      changeColor: !props.isCompleted
+      changeColor: !props.isCompleted,
     };
   }
 
@@ -37,9 +31,9 @@ class Timer extends Component {
     const {decrement, seconds} = this.props;
 
     if (seconds === 0) {
-      Timer.clearAllIntervals();
+      clearAllIntervals();
       this.setState({
-        isPaused: false
+        isPaused: false,
       });
     }
 
@@ -76,7 +70,8 @@ class Timer extends Component {
 
     current.setSeconds(seconds);
 
-    const resetIcon = (isPaused && !isCompleted) ? <i className="far fa-pause-circle fa-3x"/> : <i className="btn far fa-play-circle fa-3x"/>;
+    const resetIcon = (isPaused && !isCompleted) ? <i className="far fa-pause-circle fa-3x"/> :
+      <i className="btn far fa-play-circle fa-3x"/>;
 
     return (
       <div className={cssClasses} data-tid="counter">
@@ -85,7 +80,7 @@ class Timer extends Component {
             <i className="fa fa-arrow-left fa-3x"/>
           </Link>
         </div>
-        <div >
+        <div>
           <h1>
             {current.toISOString().substr(14, 5)}
           </h1>

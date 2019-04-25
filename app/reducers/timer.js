@@ -1,17 +1,11 @@
-import {DECREMENT_TIME, RESET_TIME, PAUSE_TIME} from '../actions/timer';
+import {DECREMENT_TIME, PAUSE_TIME, RESET_TIME} from '../actions/timer';
+import {clearAllIntervals} from '../utils/WindowsTimer';
 
 const initState = {
-  seconds: 1500,
+  seconds: 5,
   isPaused: false,
   isCompleted: false,
   init: 1500,
-};
-
-const clearAllIntervals = () => {
-  const maxIntervalId = window.setTimeout(() => false, 0);
-  for (let index = 0; index < maxIntervalId; index += 1) {
-    window.clearTimeout(index);
-  }
 };
 
 const onSecondsEqualZero = state => {
