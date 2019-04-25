@@ -1,4 +1,4 @@
-import {DECREMENT_TIME, PAUSE_TIME, RESET_TIME} from '../actions/timer';
+import {DECREMENT_TIME, PAUSE_TIME, RESET_TIME, INIT_TIME} from '../actions/timer';
 import {clearAllIntervals} from '../utils/WindowsTimer';
 
 const initState = {
@@ -25,6 +25,8 @@ export default function timer(state = initState, action) {
     case RESET_TIME:
       clearAllIntervals();
       return {...state, seconds: state.init, isPaused: false, isCompleted: false};
+    case INIT_TIME:
+      return {...state, seconds: action.seconds, isPaused: false, isCompleted: false};
     case PAUSE_TIME:
       return {...state, isPaused: true};
     default:

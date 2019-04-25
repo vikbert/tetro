@@ -10,13 +10,15 @@ class Timer extends Component {
     super(props);
     this.state = {
       isPaused: props.isPaused,
-      changeColor: !props.isCompleted,
+      changeColor: false,
     };
   }
 
   componentDidUpdate() {
     const {changeColor} = this.state;
-    if (changeColor) {
+    const {isCompleted} = this.props;
+    console.log('did updated', changeColor);
+    if (changeColor && isCompleted) {
       setTimeout(() => {
         this.setState({changeColor: false});
       }, 8000);
@@ -34,6 +36,7 @@ class Timer extends Component {
       clearAllIntervals();
       this.setState({
         isPaused: false,
+        changeColor: true,
       });
     }
 
@@ -54,11 +57,21 @@ class Timer extends Component {
 
   onReset = e => {
     e.preventDefault();
+
     const {reset} = this.props;
     this.setState({
       isPaused: false,
     });
+
     reset(this.timerId);
+    clearInterval(this.timerId);
+  };
+
+  onClickTimeInterval = (value, e) => {
+    e.preventDefault();
+
+    const {init} = this.props;
+    init(value);
     clearInterval(this.timerId);
   };
 
@@ -67,6 +80,7 @@ class Timer extends Component {
     const {seconds, isCompleted} = this.props;
     const {isPaused, changeColor} = this.state;
     const cssClasses = changeColor && isCompleted ? `${styles.container} ${styles.green}` : styles.container;
+    console.log(cssClasses);
 
     current.setSeconds(seconds);
 
@@ -81,16 +95,33 @@ class Timer extends Component {
           </Link>
         </div>
         <div>
+
+          <a href="#25" onClick={(e) => this.onClickTimeInterval(1500, e)} >
+            <div className={styles.circle} data-seconds="1500">
+              <p>25</p>
+            </div>
+          </a>
+          <a href="#10" onClick={(e) => this.onClickTimeInterval(2700, e)}>
+            <div className={styles.circle} data-seconds="2700">
+              <p>45</p>
+            </div>
+          </a>
+          <a href="#5" onClick={(e) => this.onClickTimeInterval(10, e)}>
+            <div className={styles.circle} data-seconds="300">
+              <p>5</p>
+            </div>
+          </a>
           <h1>
             {current.toISOString().substr(14, 5)}
           </h1>
           <div className="btnGroup">
             <a href="#reset" onClick={this.onReset}>
-              <i className="fas fa-ban fa-3x"/>
+              <i className="fas fa-redo fa-3x"/>
             </a>
             <a href="#toggle" onClick={this.onTogglePause}>
               {resetIcon}
             </a>
+
           </div>
         </div>
       </div>
@@ -104,6 +135,7 @@ Timer.propTypes = {
   isCompleted: PropTypes.bool.isRequired,
   decrement: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
+  init: PropTypes.func.isRequired,
 };
 
 export default Timer;
