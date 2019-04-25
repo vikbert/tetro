@@ -14,8 +14,8 @@ class Home extends Component {
   }
 
   componentDidUpdate() {
-
     const {changeColor} = this.state;
+
     if (changeColor) {
       setTimeout(() => {
         this.setState({changeColor: false});
@@ -27,13 +27,14 @@ class Home extends Component {
     const {changeColor} = this.state;
     const {isCompleted} = this.props;
     const bgStyle = changeColor && isCompleted ? {background: 'green'} : null;
+    const cssClasses = changeColor && isCompleted ? `${styles.container} ${styles.green}` : styles.container;
 
     return (
-      <div className={styles.container} data-tid="container" style={bgStyle}>
+      <div className={cssClasses} data-tid="container" style={bgStyle}>
         <Clock/>
         <br/>
         <Link to={routes.COUNTER}>
-          <i className="far fa-clock"/>
+          <i className="far fa-clock fa-3x"/>
         </Link>
       </div>
     );

@@ -16,7 +16,17 @@ class Timer extends Component {
     super(props);
     this.state = {
       isPaused: props.isPaused,
+      changeColor: !props.isCompleted
     };
+  }
+
+  componentDidUpdate() {
+    const {changeColor} = this.state;
+    if (changeColor) {
+      setTimeout(() => {
+        this.setState({changeColor: false});
+      }, 8000);
+    }
   }
 
   triggerCountDown() {
@@ -31,7 +41,6 @@ class Timer extends Component {
       this.setState({
         isPaused: false
       });
-      return;
     }
 
     decrement(this.timerId);
@@ -62,26 +71,27 @@ class Timer extends Component {
   render() {
     const current = new Date(null);
     const {seconds, isCompleted} = this.props;
-    const {isPaused} = this.state;
+    const {isPaused, changeColor} = this.state;
+    const cssClasses = changeColor && isCompleted ? `${styles.container} ${styles.green}` : styles.container;
 
     current.setSeconds(seconds);
 
-    const resetIcon = (isPaused && !isCompleted) ? <i className="far fa-pause-circle"/> : <i className="btn far fa-play-circle"/>;
+    const resetIcon = (isPaused && !isCompleted) ? <i className="far fa-pause-circle fa-3x"/> : <i className="btn far fa-play-circle fa-3x"/>;
 
     return (
-      <div>
+      <div className={cssClasses} data-tid="counter">
         <div className={styles.backButton} data-tid="backButton">
           <Link to={routes.HOME}>
             <i className="fa fa-arrow-left fa-3x"/>
           </Link>
         </div>
-        <div className={`${styles.container}`} data-tid="counter">
+        <div >
           <h1>
             {current.toISOString().substr(14, 5)}
           </h1>
           <div className="btnGroup">
             <a href="#reset" onClick={this.onReset}>
-              <i className="fas fa-ban"/>
+              <i className="fas fa-ban fa-3x"/>
             </a>
             <a href="#toggle" onClick={this.onTogglePause}>
               {resetIcon}

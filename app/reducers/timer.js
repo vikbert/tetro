@@ -1,7 +1,7 @@
 import {DECREMENT_TIME, RESET_TIME, PAUSE_TIME} from '../actions/timer';
 
 const initState = {
-  seconds: 5,
+  seconds: 1500,
   isPaused: false,
   isCompleted: false,
   init: 1500,

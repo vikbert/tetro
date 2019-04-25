@@ -5,6 +5,9 @@
     height: 100%;
     width: 100%;
 }
+.container.green {
+    background-color: green;
+}
 
 .container h1 {
     font-size: 10rem;
@@ -19,13 +22,16 @@
 }
 
 .container a{
-    font-size: 4rem;
+    font-size: 1rem;
     padding: 0 10px;
 }
 
 /* counter */
 .backButton {
     position: absolute;
-    padding: 40px;
+    padding: 2px;
+}
+.fa-3x {
+    font-size: 1rem !important;
 }
 
