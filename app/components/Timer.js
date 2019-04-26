@@ -3,7 +3,6 @@ import {Link} from "react-router-dom";
 import PropTypes from 'prop-types';
 import styles from './Component.css';
 import routes from "../constants/routes";
-import {clearAllIntervals} from '../utils/WindowsTimer';
 
 class Timer extends Component {
   constructor(props) {
@@ -17,7 +16,7 @@ class Timer extends Component {
   componentDidUpdate() {
     const {changeColor} = this.state;
     const {isCompleted} = this.props;
-    console.log('did updated', changeColor);
+
     if (changeColor && isCompleted) {
       setTimeout(() => {
         this.setState({changeColor: false});
@@ -33,7 +32,6 @@ class Timer extends Component {
     const {decrement, seconds} = this.props;
 
     if (seconds === 0) {
-      clearAllIntervals();
       this.setState({
         isPaused: false,
         changeColor: true,
@@ -47,67 +45,74 @@ class Timer extends Component {
     e.preventDefault();
 
     const {isPaused} = this.state;
-    this.setState({isPaused: !isPaused});
-    if (isPaused === true) {
-      clearInterval(this.timerId);
+    const {pause, start} = this.props;
+    const newStatus = !isPaused;
+
+    if (newStatus === true) {
+      pause();
     } else {
+      start();
       this.triggerCountDown();
     }
+
+    this.setState({isPaused: newStatus});
   };
 
   onReset = e => {
     e.preventDefault();
 
     const {reset} = this.props;
+    const {selectedSeconds} = this.state;
     this.setState({
       isPaused: false,
     });
 
-    reset(this.timerId);
-    clearInterval(this.timerId);
+    reset(selectedSeconds);
   };
 
-  onClickTimeInterval = (value, e) => {
+  onClickTimeInterval = (seconds, e) => {
     e.preventDefault();
 
-    const {init} = this.props;
-    init(value);
+    const {reset} = this.props;
+    this.setState({
+      selectedSeconds: seconds,
+    });
+
+    reset(seconds);
     clearInterval(this.timerId);
   };
 
   render() {
     const current = new Date(null);
-    const {seconds, isCompleted} = this.props;
+    const {seconds, init, isCompleted} = this.props;
     const {isPaused, changeColor} = this.state;
-    const cssClasses = changeColor && isCompleted ? `${styles.container} ${styles.green}` : styles.container;
-    console.log(cssClasses);
+    const cssClassContainer = changeColor && isCompleted ? `${styles.container} ${styles.green}` : styles.container;
 
     current.setSeconds(seconds);
 
-    const resetIcon = (isPaused && !isCompleted) ? <i className="far fa-pause-circle fa-3x"/> :
+    const toggleIcon = (!isPaused && !isCompleted) ? <i className="far fa-pause-circle fa-3x"/> :
       <i className="btn far fa-play-circle fa-3x"/>;
 
     return (
-      <div className={cssClasses} data-tid="counter">
+      <div className={cssClassContainer} data-tid="counter">
         <div className={styles.backButton} data-tid="backButton">
           <Link to={routes.HOME}>
             <i className="fa fa-arrow-left fa-3x"/>
           </Link>
         </div>
         <div>
-
-          <a href="#25" onClick={(e) => this.onClickTimeInterval(1500, e)} >
-            <div className={styles.circle} data-seconds="1500">
+          <a href="#25" onClick={(e) => this.onClickTimeInterval(1500, e)}>
+            <div className={init === 1500 ? `${styles.circle} ${styles.selected}` : styles.circle}>
               <p>25</p>
             </div>
           </a>
           <a href="#10" onClick={(e) => this.onClickTimeInterval(2700, e)}>
-            <div className={styles.circle} data-seconds="2700">
+            <div className={init === 2700 ? `${styles.circle} ${styles.selected}` : styles.circle}>
               <p>45</p>
             </div>
           </a>
-          <a href="#5" onClick={(e) => this.onClickTimeInterval(10, e)}>
-            <div className={styles.circle} data-seconds="300">
+          <a href="#5" onClick={(e) => this.onClickTimeInterval(300, e)}>
+            <div className={init === 300 ? `${styles.circle} ${styles.selected}` : styles.circle}>
               <p>5</p>
             </div>
           </a>
@@ -119,9 +124,8 @@ class Timer extends Component {
               <i className="fas fa-redo fa-3x"/>
             </a>
             <a href="#toggle" onClick={this.onTogglePause}>
-              {resetIcon}
+              {toggleIcon}
             </a>
-
           </div>
         </div>
       </div>
@@ -131,11 +135,13 @@ class Timer extends Component {
 
 Timer.propTypes = {
   seconds: PropTypes.number.isRequired,
+  init: PropTypes.number.isRequired,
   isPaused: PropTypes.bool.isRequired,
   isCompleted: PropTypes.bool.isRequired,
   decrement: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
-  init: PropTypes.func.isRequired,
+  pause: PropTypes.func.isRequired,
+  start: PropTypes.func.isRequired,
 };
 
 export default Timer;

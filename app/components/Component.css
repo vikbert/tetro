@@ -44,6 +44,9 @@
     text-align: center;
     display: inline-block;
 }
+.circle.selected {
+    border: 0.2em solid yellow;
+}
 .circle p {
     margin-top: 0.13em;
     font-size: 1.8em;
