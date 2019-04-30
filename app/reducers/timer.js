@@ -2,36 +2,30 @@ import {DECREMENT_TIME, PAUSE_TIME, START_TIME, RESET_TIME} from '../actions/tim
 import {clearAllIntervals} from '../utils/WindowsTimer';
 
 const initState = {
-  seconds: 1500,
-  isPaused: true,
+  current: 5,
+  isRunning: false,
   isCompleted: false,
   init: 1500,
-};
-
-const onSecondsEqualZero = state => {
-  clearAllIntervals();
-
-  return {...state, isPaused: true, isCompleted: true, color: undefined};
 };
 
 export default function timer(state = initState, action) {
   switch (action.type) {
     case DECREMENT_TIME:
-
-      if (state.seconds === 0) {
-        return onSecondsEqualZero(state);
+      if (state.current === 0) {
+        clearAllIntervals();
+        return {...state, isRunning: false, isCompleted: true, color: undefined};
       }
 
-      return state.seconds > 0 ? {...state, seconds: state.seconds - 1} : state;
+      return {...state, current: state.current - 1};
     case RESET_TIME:
       clearAllIntervals();
-      return {...state, seconds: action.seconds, init: action.seconds, isPaused: true, isCompleted: false};
+      return {...state, current: action.current, init: action.current, isRunning: false, isCompleted: false};
     case PAUSE_TIME:
       clearAllIntervals();
-      return {...state, isPaused: true};
+      return {...state, isRunning: false};
     case START_TIME:
       clearAllIntervals();
-      return {...state, isPaused: false};
+      return {...state, isRunning: true};
     default:
       return state;
   }

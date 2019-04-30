@@ -8,7 +8,6 @@ class Timer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isPaused: props.isPaused,
       changeColor: false,
     };
   }
@@ -29,11 +28,11 @@ class Timer extends Component {
   };
 
   countDown() {
-    const {decrement, seconds} = this.props;
+    const {decrement, current} = this.props;
 
-    if (seconds === 0) {
+    if (current === 0) {
       this.setState({
-        isPaused: false,
+        isRunning: true,
         changeColor: true,
       });
     }
@@ -41,56 +40,45 @@ class Timer extends Component {
     decrement(this.timerId);
   };
 
-  onTogglePause = e => {
+  onToggleIcon = e => {
     e.preventDefault();
 
-    const {isPaused} = this.state;
-    const {pause, start} = this.props;
-    const newStatus = !isPaused;
+    const {pause, start, isRunning} = this.props;
 
-    if (newStatus === true) {
+    if (isRunning) {
       pause();
     } else {
       start();
       this.triggerCountDown();
     }
-
-    this.setState({isPaused: newStatus});
   };
 
   onReset = e => {
     e.preventDefault();
 
-    const {reset} = this.props;
-    const {selectedSeconds} = this.state;
-    this.setState({
-      isPaused: false,
-    });
-
-    reset(selectedSeconds);
+    const {reset, init} = this.props;
+    console.log(init, reset);
+    reset(init);
   };
 
-  onClickTimeInterval = (seconds, e) => {
+  onClickTimeInterval = (current, e) => {
     e.preventDefault();
 
     const {reset} = this.props;
-    this.setState({
-      selectedSeconds: seconds,
-    });
 
-    reset(seconds);
+    reset(current);
     clearInterval(this.timerId);
   };
 
   render() {
-    const current = new Date(null);
-    const {seconds, init, isCompleted} = this.props;
-    const {isPaused, changeColor} = this.state;
+    const newDate = new Date(null);
+    const {current, init, isCompleted, isRunning} = this.props;
+    const {changeColor} = this.state;
     const cssClassContainer = changeColor && isCompleted ? `${styles.container} ${styles.green}` : styles.container;
 
-    current.setSeconds(seconds);
+    newDate.setSeconds(current);
 
-    const toggleIcon = (!isPaused && !isCompleted) ? <i className="far fa-pause-circle fa-3x"/> :
+    const toggleIcon = isRunning ? <i className="far fa-pause-circle fa-3x"/> :
       <i className="btn far fa-play-circle fa-3x"/>;
 
     return (
@@ -117,13 +105,13 @@ class Timer extends Component {
             </div>
           </a>
           <h1>
-            {current.toISOString().substr(14, 5)}
+            {newDate.toISOString().substr(14, 5)}
           </h1>
           <div className="btnGroup">
             <a href="#reset" onClick={this.onReset}>
               <i className="fas fa-redo fa-3x"/>
             </a>
-            <a href="#toggle" onClick={this.onTogglePause}>
+            <a href="#toggle" onClick={this.onToggleIcon}>
               {toggleIcon}
             </a>
           </div>
@@ -134,9 +122,9 @@ class Timer extends Component {
 }
 
 Timer.propTypes = {
-  seconds: PropTypes.number.isRequired,
+  current: PropTypes.number.isRequired,
   init: PropTypes.number.isRequired,
-  isPaused: PropTypes.bool.isRequired,
+  isRunning: PropTypes.bool.isRequired,
   isCompleted: PropTypes.bool.isRequired,
   decrement: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,

@@ -10,10 +10,10 @@ export function decrement(timeId) {
   };
 }
 
-export function reset(seconds) {
+export function reset(current) {
   return {
     type: RESET_TIME,
-    seconds,
+    current,
   };
 }
 
