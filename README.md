@@ -67,6 +67,8 @@ To package apps with options:
 
 ```bash
 $ yarn package --[option]
+$ yarn package --mac
+
 ```
 
 To run End-to-End Test
